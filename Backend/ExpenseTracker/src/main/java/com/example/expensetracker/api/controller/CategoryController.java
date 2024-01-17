@@ -1,0 +1,50 @@
+package com.example.expensetracker.api.controller;
+
+import com.example.expensetracker.api.model.Category;
+import com.example.expensetracker.service.CategoryService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+public class CategoryController {
+
+    private CategoryService categoryService;
+
+    @Autowired
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
+
+    @GetMapping("/category")
+    public Category getCategory(@RequestParam String id) {
+        Optional category = categoryService.getCategory(id);
+        if (category.isPresent()) {
+            return (Category) category.get();
+        }
+        return null;
+    }
+
+    @GetMapping("/categories")
+    public List<Category> getCategoryList() {
+        return categoryService.getAllCategories();
+    }
+
+    @PostMapping("/addCategory")
+    public void addCategory(String name, String type, float budget) {
+        categoryService.addCategory(name, type, budget);
+    }
+
+    @DeleteMapping("/deleteCategory")
+    public void deleteCategory(String id) {
+        categoryService.deleteCategory(id);
+    }
+
+    @PutMapping("/updateCategory")
+    public void updateCategory(String id, String name, String type, float budget) {
+        categoryService.updateCategory(id, name, type, budget);
+    }
+
+}
