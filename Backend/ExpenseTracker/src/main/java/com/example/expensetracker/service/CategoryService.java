@@ -74,7 +74,6 @@ public class CategoryService {
         for (Category category: categoryList) {
             if (id.equals(category.getCategoryId())) {
                 category.setCategoryName(newCategory.getCategoryName());
-                category.setCategoryType(newCategory.getCategoryType());
                 category.setCategoryBudget(newCategory.getCategoryBudget());
                 return "Successfully updated";
             }
