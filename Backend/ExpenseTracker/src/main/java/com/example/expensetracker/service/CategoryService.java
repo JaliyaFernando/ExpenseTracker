@@ -43,14 +43,19 @@ public class CategoryService {
         return categoryList;
     }
 
-    public void addCategory(String name, String type, float budget) {
+    public Category addCategory(Category newCategory) {
         String generatedId = "";
-        if (type.equals("Expense")) {
+        if (newCategory.getCategoryType().equals("Expense")) {
             generatedId = "E" + generateUniqueNo();
         } else {
             generatedId = "I" + generateUniqueNo();
         }
-        categoryList.add(new Category(generatedId, name, type, budget));
+
+        newCategory.setCategoryId(generatedId);
+
+        categoryList.add(newCategory);
+
+        return newCategory;
     }
 
     private synchronized int generateUniqueNo() {
@@ -65,13 +70,15 @@ public class CategoryService {
         }
     }
 
-    public void updateCategory(String id, String name, String type, float budget) {
+    public String updateCategory(String id, Category newCategory) {
         for (Category category: categoryList) {
             if (id.equals(category.getCategoryId())) {
-                category.setCategoryName(name);
-                category.setCategoryType(type);
-                category.setCategoryBudget(budget);
+                category.setCategoryName(newCategory.getCategoryName());
+                category.setCategoryType(newCategory.getCategoryType());
+                category.setCategoryBudget(newCategory.getCategoryBudget());
+                return "Successfully updated";
             }
         }
+        return "Update failed";
     }
 }
