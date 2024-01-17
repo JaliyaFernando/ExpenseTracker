@@ -23,7 +23,7 @@ public class CategoryService {
         Category category3 = new Category("E2", "Dining out", "Expense", 9000);
         Category category4 = new Category("E3", "Clothes", "Expense", 5000);
         Category category5 = new Category("E4", "Travel", "Expense", 10000);
-        Category category6 = new Category("E5", "Sports", "Expense", 3500);
+        Category category6 = new Category("E5", "Sports", "Expense", 4500);
 
         categoryList.addAll(Arrays.asList(category1, category2, category3, category4, category5, category6));
     }
