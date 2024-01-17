@@ -1,5 +1,5 @@
 {
-  "name": "fitness_app",
+  "name": "expense_tracker_app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

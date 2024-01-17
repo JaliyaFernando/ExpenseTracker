@@ -211,7 +211,7 @@ export default class Transactions extends Component{
                     </Form>
                 </div>
 
-                <h3>My Cheatmeals</h3>
+                <h3>Transactions</h3>
 
                 <div className="my_workout">
                     {
