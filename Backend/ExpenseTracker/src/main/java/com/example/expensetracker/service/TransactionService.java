@@ -63,13 +63,16 @@ public class TransactionService {
 
     // deleteTransaction
     public String deleteTransaction(Integer id) {
+        boolean idFound = false;
         for (Transaction transaction: transactionList) {
             if (id.equals(transaction.getId())) {
                 transactionList.remove(transaction);
+                idFound = true;
                 return "Successfully Removed!";
-            } else {
-                return "Not Found!";
             }
+        }
+        if (!idFound) {
+            return "Not Found!";
         }
         return "Delete Failed!";
     
@@ -77,14 +80,16 @@ public class TransactionService {
     
     // deleteTransaction by category
     public String deleteTransactionByCategory(String categoryId) {
+        boolean idFound = false;
         for (Transaction transaction : transactionList) {
             if (categoryId.equals(transaction.getCategoryId())) {
                 transactionList.remove(transaction);
+                idFound = true;
                 return "Successfully Removed!";
             }
-            else{
-                return "Not Found!";
-            }
+        }
+        if (!idFound) {
+            return "Not Found!";
         }
         return "Delete Failed!";
     }
