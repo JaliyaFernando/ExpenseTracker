@@ -54,4 +54,12 @@ public class Transaction {
     public void setDate(String date) {
         this.date = date;
     }
+
+    public boolean isExpense() {
+        return categoryId.startsWith("E");
+    }
+
+    public boolean isIncome() {
+        return categoryId.startsWith("I");
+    }
 }
