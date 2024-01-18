@@ -39,8 +39,8 @@ public class CategoryController {
     }
 
     @DeleteMapping("/deleteCategory")
-    public void deleteCategory(String id) {
-        categoryService.deleteCategory(id);
+    public String deleteCategory(String id) {
+        return categoryService.deleteCategory(id);
     }
 
     @PutMapping("/updateCategory")

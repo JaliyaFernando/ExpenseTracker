@@ -50,5 +50,22 @@ public class TransactionController {
     public Transaction addRecurringTransaction(@RequestBody RecurringTransaction  newTransaction) {
         return transactionService.addTransaction(newTransaction);
     }
+    
+    // Endpoint to update a transaction
+    @PutMapping("/updateTransaction")
+    public String updateTransaction(@RequestParam Integer id, @RequestBody Transaction newTransaction) {
+        return transactionService.updateTransaction(id, newTransaction);
+    }
 
+    // Endpoint to delete a transaction
+    @DeleteMapping("/deleteTransaction")
+    public String deleteTransaction(Integer id) {
+        return transactionService.deleteTransaction(id);
+    }
+    
+    // Endpoint to delete a transaction by category
+    @DeleteMapping("/deleteTransactionByCategory")
+    public String deleteTransactionByCategory(String categoryId) {
+       return transactionService.deleteTransactionByCategory(categoryId);
+    }
 }

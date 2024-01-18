@@ -62,12 +62,17 @@ public class CategoryService {
         return ++idCounter;
     }
 
-    public void deleteCategory(String id) {
+    public String deleteCategory(String id) {
         for (Category category: categoryList) {
             if (id.equals(category.getCategoryId())) {
                 categoryList.remove(category);
+                return "Successfully Removed!";
+            } 
+            else {
+                return "Not Found!";
             }
         }
+        return "Delete Failed!";
     }
 
     public String updateCategory(String id, Category newCategory) {
@@ -75,9 +80,12 @@ public class CategoryService {
             if (id.equals(category.getCategoryId())) {
                 category.setCategoryName(newCategory.getCategoryName());
                 category.setCategoryBudget(newCategory.getCategoryBudget());
-                return "Successfully updated";
+                return "Successfully Updated!";
+            }
+            else {
+                return "Not Found!";
             }
         }
-        return "Update failed";
+        return "Update Failed!";
     }
 }

@@ -60,5 +60,51 @@ public class TransactionService {
 
         return newTransaction;
     }
+
+    // deleteTransaction
+    public String deleteTransaction(Integer id) {
+        for (Transaction transaction: transactionList) {
+            if (id.equals(transaction.getId())) {
+                transactionList.remove(transaction);
+                return "Successfully Removed!";
+            } else {
+                return "Not Found!";
+            }
+        }
+        return "Delete Failed!";
+    
+    }
+    
+    // deleteTransaction by category
+    public String deleteTransactionByCategory(String categoryId) {
+        for (Transaction transaction : transactionList) {
+            if (categoryId.equals(transaction.getCategoryId())) {
+                transactionList.remove(transaction);
+                return "Successfully Removed!";
+            }
+            else{
+                return "Not Found!";
+            }
+        }
+        return "Delete Failed!";
+    }
+    
+    // updateTransaction
+    public String updateTransaction(Integer id, Transaction newTransaction) {
+        for (Transaction transaction: transactionList) {
+            if (id.equals(transaction.getId())) {
+                transaction.setDescription(newTransaction.getDescription());
+                transaction.setAmount(newTransaction.getAmount());
+                transaction.setDate(newTransaction.getDate());
+                return "Successfully Updated!";
+            }
+            else {
+                return "Not Found!";
+            }
+        }
+        return "Update Failed!";
+    }
+    
+
 }
 
