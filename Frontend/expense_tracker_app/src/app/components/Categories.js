@@ -6,66 +6,69 @@ import {Button, Form} from "react-bootstrap";
 export default class Categories extends Component{
     constructor(props) {
         super(props);
-        this.onChangeCategoryName = this.onChangeCategoryName.bind(this);
-        this.onChangeCategoryType = this.onChangeCategoryType.bind(this);
-        this.onChangeCategoryBudget = this.onChangeCategoryBudget.bind(this);
-        this.getCategories = this.getCategories.bind(this);
+        this.onChangeDate = this.onChangeDate.bind(this);
+        this.onChangeDescription = this.onChangeDescription.bind(this);
+        this.onChangeTime = this.onChangeTime.bind(this);
+        this.onChangeWeight = this.onChangeWeight.bind(this);
+        this.getWorkouts = this.getWorkouts.bind(this);
         this.onUpdate = this.onUpdate.bind(this);
         this.onRemove = this.onRemove.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.state = {
-            categories : [],
+            my_workouts : [],
             message: '',
-            categoryId: '',
-            categoryName:'',
-            categoryType: '',
-            categoryBudget: '',
+            date:'',
+            description:'',
+            time: '',
+            weight: '',
+            workoutID: null,
             buttonName:'Add',
         }
-        this.getCategories();
+        this.getWorkouts();
     }
-    onChangeCategoryName(e) {
+    onChangeDate(e) {
         this.setState({
-            categoryName: e.target.value
+            date: e.target.value
         });
     }
-    onChangeCategoryType(e) {
+    onChangeDescription(e) {
         this.setState({
-            categoryType: e.target.value
+            description: e.target.value
         });
     }
-    onChangeCategoryBudget(e) {
+    onChangeTime(e) {
         this.setState({
-            categoryBudget: e.target.value
+            time: e.target.value
+        });
+    }
+    onChangeWeight(e) {
+        this.setState({
+            weight: e.target.value
         });
     }
 
     onUpdate = (Id) => {
-        // this.setState({
-        //     buttonName: 'Update'
-        // });
+        this.setState({
+            buttonName: 'Update'
+        });
 
-        // for (let i = 0; i < this.state.my_workouts.length; i++) {
-        //     if (this.state.my_workouts[i].workoutID === Id) {
-        //         this.setState({
-        //             workoutID: Id,
-        //             date: new Date(this.state.my_workouts[i].date).toISOString().split('T')[0],
-        //             description:this.state.my_workouts[i].name,
-        //             time: this.state.my_workouts[i].time,
-        //             weight: this.state.my_workouts[i].weight,
-        //         });
-        //     }
-        // }
+        for (let i = 0; i < this.state.my_workouts.length; i++) {
+            if (this.state.my_workouts[i].workoutID === Id) {
+                this.setState({
+                    workoutID: Id,
+                    date: new Date(this.state.my_workouts[i].date).toISOString().split('T')[0],
+                    description:this.state.my_workouts[i].name,
+                    time: this.state.my_workouts[i].time,
+                    weight: this.state.my_workouts[i].weight,
+                });
+            }
+        }
     }
 
-    // localhost:8080/categories/deleteCategory?id=E5
-    // http://localhost:8080/categories/deleteCategory?id=
     onRemove = (Id) => {
-        console.log("xxxxxxx ", Id)
-        axios.delete(APIs.CATEGORIES_BASE_URL+APIs.category.DELETE_CATEGORY+Id)
+        axios.delete(APIs.FITNESS_BASE_URL+APIs.workout.DELETE_NEW_WORKOUT+Id)
             .then(res => {
-                console.log("after delete")
-                    window.location.href = "/categories";
+                    window.location.href = "/workouts";
                     this.setState({
                         message: 'Record deleted successfully'
                     });
@@ -74,69 +77,69 @@ export default class Categories extends Component{
     }
 
     onSubmit(e) {
-        // e.preventDefault();
-        // if(this.state.workoutID != null){
-        //     const obj = {
-        //         WorkoutID: this.state.workoutID,
-        //         UserID: this.state.user.UserID,
-        //         Date: this.this.state.date,
-        //         Name: this.state.description,
-        //         Time: this.state.time,
-        //         Weight: this.state.weight,
-        //     };
-        //     axios.put(APIs.FITNESS_BASE_URL + APIs.workout.UPDATE_NEW_WORKOUT+this.state.workoutID, obj)
-        //         .then(res => {
-        //                 window.location.href = "/workouts";
-        //                 this.setState({
-        //                     message: 'Record updated successfully'
-        //                 });
-        //             }
-        //         );
-        //     this.setState({
-        //         date: '',
-        //         description: '',
-        //         time: '',
-        //         weight: '',
-        //         workoutID: null,
-        //         buttonName:'Add',
-        //     });
+        e.preventDefault();
+        if(this.state.workoutID != null){
+            const obj = {
+                WorkoutID: this.state.workoutID,
+                UserID: this.state.user.UserID,
+                Date: this.this.state.date,
+                Name: this.state.description,
+                Time: this.state.time,
+                Weight: this.state.weight,
+            };
+            axios.put(APIs.FITNESS_BASE_URL + APIs.workout.UPDATE_NEW_WORKOUT+this.state.workoutID, obj)
+                .then(res => {
+                        window.location.href = "/workouts";
+                        this.setState({
+                            message: 'Record updated successfully'
+                        });
+                    }
+                );
+            this.setState({
+                date: '',
+                description: '',
+                time: '',
+                weight: '',
+                workoutID: null,
+                buttonName:'Add',
+            });
 
-        // }else {
-        //     const obj = {
-        //         UserID: this.state.user.UserID,
-        //         Date: this.state.date,
-        //         Name: this.state.description,
-        //         Time: this.state.time,
-        //         Weight: this.state.weight,
-        //     };
-        //     const weight = {
-        //         weight: this.state.weight,
-        //     };
-        //     axios.post(APIs.FITNESS_BASE_URL + APIs.workout.ADD_NEW_WORKOUT, obj)
-        //         .then(res => {
-        //             axios.put(APIs.BASE_URL + APIs.user.UPDATE_WEIGHT+this.state.user.UserID,weight)
-        //                 .then(res => {
-        //                         console.log(res.data.message);
-        //                     }
-        //                 );
+        }else {
+            const obj = {
+                UserID: this.state.user.UserID,
+                Date: this.state.date,
+                Name: this.state.description,
+                Time: this.state.time,
+                Weight: this.state.weight,
+            };
+            const weight = {
+                weight: this.state.weight,
+            };
+            axios.post(APIs.FITNESS_BASE_URL + APIs.workout.ADD_NEW_WORKOUT, obj)
+                .then(res => {
+                    axios.put(APIs.BASE_URL + APIs.user.UPDATE_WEIGHT+this.state.user.UserID,weight)
+                        .then(res => {
+                                console.log(res.data.message);
+                            }
+                        );
 
-        //                 window.location.href = "/workouts";
-        //                 this.setState({
-        //                     message: 'New record added successfully'
-        //                 });
-        //             }
-        //         );
-        //     this.setState({
-        //         date: '',
-        //         description: '',
-        //         time: '',
-        //         weight: '',
-        //     });
-        // }
+                        window.location.href = "/workouts";
+                        this.setState({
+                            message: 'New record added successfully'
+                        });
+                    }
+                );
+            this.setState({
+                date: '',
+                description: '',
+                time: '',
+                weight: '',
+            });
+        }
     }
 
-    getCategories(){
-        axios.get(APIs.CATEGORIES_BASE_URL
+    getWorkouts(){
+        axios.get(APIs.FITNESS_BASE_URL+APIs.workout.MY_WORKOUTS+this.state.user.UserID
         )
             .then(
                 (response) => {
@@ -144,23 +147,24 @@ export default class Categories extends Component{
 
                         this.setState(
                             {
-                                categories: response.data
+                                my_workouts: response.data
                             },
                             () => {
                                 // Callback function after state is updated
-                                console.log("Length of categories:", this.state.categories.length);
+                                console.log("Updated my_workouts:", this.state.my_workouts);
+                                console.log("Length of my_workouts:", this.state.my_workouts.length);
                             })
                     }
                     else{
                         this.setState({
-                            message:'No categories'
+                            message:'No workouts at the moment'
                         });
                     }
                 },
                 (error) => {
                     console.log(error);
                     this.setState({
-                        message:'No categories'
+                        message:'No workouts at the moment'
                     });
                 }
             );
@@ -168,96 +172,112 @@ export default class Categories extends Component{
     render(){
         return (
             <div className="workouts" align="center">
-                <h2>Add Category</h2>
-                <div className="add_workout" align="center">
-                    <Form onSubmit={this.onSubmit}>
-                        <Form.Group>
-                            <Form.Label>Name</Form.Label>
-                            <input
-                                id="categoryName"
-                                name="categoryName"
-                                value={this.state.categoryName}
-                                onChange={this.onChangeCategoryName}
-                                required = {true}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Type</Form.Label>
-                            <input
-                                id="categoryType"
-                                name="categoryType"
-                                value={this.state.categoryType}
-                                onChange={this.onChangeCategoryType}
-                                required = {true}
-                            />
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Budget</Form.Label>
-                            <input
-                                id="categoryBudget"
-                                name="categoryBudget"
-                                value={this.state.categoryBudget}
-                                onChange={this.onChangeCategoryBudget}
-                                required = {true}
-                            />
-                        </Form.Group>
-                        <div align="center" className="buttons">
-                            <Button variant="primary" type="submit">
-                                <span>{this.state.buttonName}</span>
-                            </Button>
-                            <br/>
-                        </div>
-                    </Form>
+                <h2>Categories</h2>
+                <div className="add_workout" align="left">
+                <Form onSubmit={this.onSubmit}>
+                    <Form.Group>
+                        <Form.Label>Date</Form.Label>
+                        <input
+                            type="date"
+                            id="date"
+                            name="date"
+                            value={this.state.date}
+                            onChange={this.onChangeDate}
+                            required={true}
+                        />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>Description</Form.Label>
+                        <input
+                            type="text"
+                            id="description"
+                            name="description"
+                            value={this.state.description}
+                            onChange={this.onChangeDescription}
+                            required={true}
+                        />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label className="required">Time(mm)</Form.Label>
+                        <input
+                            type="text"
+                            id="time"
+                            name="time"
+                            value={this.state.time}
+                            onChange={this.onChangeTime}
+                            required={true}
+                        />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label className="required">Weight(kg)</Form.Label>
+                        <input
+                            type="text"
+                            id="weight"
+                            name="weight"
+                            value={this.state.weight}
+                            onChange={this.onChangeWeight}
+                            required={true}
+                        />
+                    </Form.Group>
+                    <div align="center" className="buttons">
+                        <Button variant="primary" type="submit">
+                            <span>{this.state.buttonName}</span>
+                        </Button>
+                        <br/>
+                    </div>
+                </Form>
                 </div>
 
-                <h3>Categories</h3>
-                <div className="categories">
-                    {
-                        (this.state.message) ? (
-                            <h5 align="center" className="alert-warning"><i className="fa fa-warning"> {this.state.message}</i> </h5>
-                        ) : (
-                            <table width="80%">
-                                <thead>
-                                <tr>
-                                    <th>Category Id</th>
-                                    <th>Category Name</th>
-                                    <th>Type</th>
-                                    <th>Budget</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    {this.state.categories.map(category => (
-                                        <tr key={category.categoryId}>
-                                            <td width="100px" align="center">{category.categoryId}</td>
-                                            <td width="100px" align="center">{category.categoryName}</td>
-                                            <td width="100px" align="center">{category.categoryType}</td>
-                                            <td width="100px" align="center">{category.categoryBudget}</td>
+                <h3>My Workouts</h3>
+
+                <div className="my_workout">
+                {
+                    (this.state.message) ? (
+                        <h5 align="center" className="alert-warning"><i className="fa fa-warning"> {this.state.message}</i> </h5>
+                    ) : (
+                        <table width="100%">
+                            <thead >
+                            <tr>
+                                <th>Date</th>
+                                <th>Details</th>
+                                <th>Time(mm)</th>
+                                <th>Weight(kg)</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                                    <tbody>
+                                    {this.state.my_workouts.map(my_workout => (
+                                        <tr key={my_workout.workoutID}>
+                                            <td width="200px">{my_workout.date}</td>
+                                            <td>{my_workout.name}</td>
+                                            <td width="100px" align="right">{my_workout.time}</td>
+                                            <td width="100px" align="right">{my_workout.weight}</td>
                                             <td width="200px" align="center">
-                                            <Button style={{
-                                                backgroundColor: '#f5f5f5',
-                                                padding: '5px',
-                                                width: '70px',
-                                                border: '1px solid #ccc',
-                                                borderRadius: '5px',
-                                                textAlign: 'center',}}
-                                                    onClick={() => this.onUpdate(category.categoryId)}>Update</Button>
-                                            <Button style={{
-                                                backgroundColor: '#Cb0c0f',
-                                                padding: '5px',
-                                                margin: '3px',
-                                                width: '70px',
-                                                color: 'white',
-                                                border: '1px solid #ccc',
-                                                borderRadius: '5px',
-                                                textAlign: 'center',}}
-                                                    onClick={() => this.onRemove(category.categoryId)}>Delete</Button>
-                                        </td>
+                                                <Button style={{
+                                                    backgroundColor: '#f5f5f5',
+                                                    padding: '5px',
+                                                    width: '70px',
+                                                    border: '1px solid #ccc',
+                                                    borderRadius: '5px',
+                                                    textAlign: 'center',}}
+                                                        onClick={() => this.onUpdate(my_workout.workoutID)}>Update</Button>
+                                                <Button style={{
+                                                    backgroundColor: '#Cb0c0f',
+                                                    padding: '5px',
+                                                    margin: '3px',
+                                                    width: '70px',
+                                                    color: 'white',
+                                                    border: '1px solid #ccc',
+                                                    borderRadius: '5px',
+                                                    textAlign: 'center',}}
+                                                        onClick={() => this.onRemove(my_workout.workoutID)}>Delete</Button>
+                                            </td>
                                         </tr>
                                     ))}
-                                </tbody>
-                            </table>
-                        )
-                    }
+                                    </tbody>
+                        </table>
+                    )
+                }
                 </div>
             </div>
         );
