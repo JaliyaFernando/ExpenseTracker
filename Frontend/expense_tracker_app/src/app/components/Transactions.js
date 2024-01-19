@@ -16,11 +16,13 @@ export default class Transactions extends Component{
         this.onChangeNote = this.onChangeNote.bind(this);
         this.onChangeRecent = this.onChangeRecent.bind(this);
         this.getTransactions = this.getTransactions.bind(this);
+        this.getCategories = this.getCategories.bind(this);
         this.onUpdate = this.onUpdate.bind(this);
         this.onRemove = this.onRemove.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.state = {
             transactions : [],
+            categories: [],
             message: '',
             date:'',
             description:'',
@@ -35,6 +37,7 @@ export default class Transactions extends Component{
             buttonName:'Add'
         }
         this.getTransactions();
+        this.getCategories();
     }
     onChangeDate(e) {
         this.setState({
@@ -194,8 +197,37 @@ export default class Transactions extends Component{
                     });
                 }
             );
-
     }
+
+    getCategories(){
+        axios.get(APIs.CATEGORIES_BASE_URL)
+            .then(
+                (response) => {
+                    if(response.data.length > 0){
+
+                        this.setState(
+                            {
+                                categories: response.data
+                            },
+                            () => {
+                                console.log("No of categories:", this.state.transactions.length);
+                            })
+                    }
+                    else{
+                        this.setState({
+                            message:'No categories at the moment'
+                        });
+                    }
+                },
+                (error) => {
+                    console.log(error);
+                    this.setState({
+                        message:'No categories at the moment'
+                    });
+                }
+            );
+    }
+
     render(){
         return (
             <div align="center">
@@ -225,15 +257,21 @@ export default class Transactions extends Component{
                             />
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label className="required">Category Id</Form.Label>
-                            <input
-                                type="text"
+                            <Form.Label className="required">Category</Form.Label>
+                            <select
                                 id="categoryId"
                                 name="categoryId"
                                 value={this.state.categoryId}
                                 onChange={this.onChangeCategoryId}
                                 required={true}
-                            />
+                            >
+                                <option value="" disabled>Select a category</option>
+                                {this.state.categories.map((category) => (
+                                    <option key={category.categoryId} value={category.categoryId}>
+                                        {category.categoryName+' - '+category.categoryType}
+                                    </option>
+                                ))}
+                            </select>
                         </Form.Group>
                         <Form.Group>
                             <Form.Label className="required">Amount</Form.Label>
