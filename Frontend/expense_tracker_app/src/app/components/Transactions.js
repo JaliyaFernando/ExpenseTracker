@@ -14,6 +14,7 @@ export default class Transactions extends Component{
         this.onChangeEndDate = this.onChangeEndDate.bind(this);
         this.onChangeRecurringEvery = this.onChangeRecurringEvery.bind(this);
         this.onChangeNote = this.onChangeNote.bind(this);
+        this.onChangeRecent = this.onChangeRecent.bind(this);
         this.getTransactions = this.getTransactions.bind(this);
         this.onUpdate = this.onUpdate.bind(this);
         this.onRemove = this.onRemove.bind(this);
@@ -31,7 +32,7 @@ export default class Transactions extends Component{
             endDate: '',
             recurringEvery: '',
             note: '',
-            buttonName:'Add',
+            buttonName:'Add'
         }
         this.getTransactions();
     }
@@ -79,6 +80,38 @@ export default class Transactions extends Component{
         this.setState({
             note: e.target.value
         });
+    }
+
+    onChangeRecent(e) {
+        if(e.target.value === 'All'){
+            this.getTransactions();
+        }else {
+            axios.get(APIs.TRANSACTIONS_BASE_URL + APIs.transaction.RECENT + parseInt(e.target.value))
+                .then(
+                    (response) => {
+                        if (response.data.length > 0) {
+
+                            this.setState(
+                                {
+                                    transactions: response.data
+                                },
+                                () => {
+                                    console.log("No of transactions:", this.state.transactions.length);
+                                })
+                        } else {
+                            this.setState({
+                                message: 'No transactions at the moment'
+                            });
+                        }
+                    },
+                    (error) => {
+                        console.log(error);
+                        this.setState({
+                            message: 'No transactions at the moment'
+                        });
+                    }
+                );
+        }
     }
 
     onUpdate = (Id) => {
@@ -135,8 +168,7 @@ export default class Transactions extends Component{
     }
 
     getTransactions(){
-        axios.get(APIs.TRANSACTIONS_BASE_URL
-        )
+        axios.get(APIs.TRANSACTIONS_BASE_URL)
             .then(
                 (response) => {
                     if(response.data.length > 0){
@@ -162,6 +194,7 @@ export default class Transactions extends Component{
                     });
                 }
             );
+
     }
     render(){
         return (
@@ -274,6 +307,20 @@ export default class Transactions extends Component{
                 </div>
 
                 <h3>Transactions</h3>
+                <Form.Group  className="view_recent" >
+                    <Form.Label className="required">View Recent Transactions</Form.Label>
+                    <select
+                        id="view_recent"
+                        name="view_recent"
+                        value={this.state.view_recent}
+                        onChange={this.onChangeRecent}
+                    >
+                        <option value="All">All</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                    </select>
+                </Form.Group>
 
                 <div className="Records">
                     {
