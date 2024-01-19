@@ -41,6 +41,7 @@ public class TransactionService {
         // Sort transactions by date using streams
         List<Transaction> sortedTransactions = transactions.stream()
                 .sorted((t1, t2) -> t1.getDate().compareTo(t2.getDate()))
+                .limit(amount)
                 .collect(Collectors.toList());
 
         // Print sorted transactions
