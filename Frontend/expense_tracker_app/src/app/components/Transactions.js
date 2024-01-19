@@ -10,7 +10,11 @@ export default class Transactions extends Component{
         this.onChangeDescription = this.onChangeDescription.bind(this);
         this.onChangeCategoryId = this.onChangeCategoryId.bind(this);
         this.onChangeAmount = this.onChangeAmount.bind(this);
-        this.getWorkouts = this.getWorkouts.bind(this);
+        this.onChangeIsRecurring = this.onChangeIsRecurring.bind(this);
+        this.onChangeEndDate = this.onChangeEndDate.bind(this);
+        this.onChangeRecurringEvery = this.onChangeRecurringEvery.bind(this);
+        this.onChangeNote = this.onChangeNote.bind(this);
+        this.getTransactions = this.getTransactions.bind(this);
         this.onUpdate = this.onUpdate.bind(this);
         this.onRemove = this.onRemove.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -20,11 +24,16 @@ export default class Transactions extends Component{
             date:'',
             description:'',
             categoryId: '',
+            transactionId: '',
             amount: '',
             id: null,
+            isRecurring: false,
+            endDate: '',
+            recurringEvery: '',
+            note: '',
             buttonName:'Add',
         }
-        this.getWorkouts();
+        this.getTransactions();
     }
     onChangeDate(e) {
         this.setState({
@@ -38,7 +47,7 @@ export default class Transactions extends Component{
     }
     onChangeCategoryId(e) {
         this.setState({
-            weight: e.target.value
+            categoryId: e.target.value
         });
     }
 
@@ -48,93 +57,84 @@ export default class Transactions extends Component{
         });
     }
 
-    onUpdate = (Id) => {
-        /*this.setState({
-            buttonName: 'Update'
-        });
+    onChangeIsRecurring(e) {
+        this.setState(prevState => ({
+            isRecurring: !prevState.isRecurring
+        }));
+    }
 
-        for (let i = 0; i < this.state.my_cheatmeals.length; i++) {
-            if (this.state.my_cheatmeals[i].cheatmealID === Id) {
-                this.setState({
-                    cheatmealID: Id,
-                    date: new Date(this.state.my_cheatmeals[i].date).toISOString().split('T')[0],
-                    description:this.state.my_cheatmeals[i].name,
-                    weight: this.state.my_cheatmeals[i].weight,
-                });
-            }
-        }*/
+    onChangeEndDate(e) {
+        this.setState({
+            endDate: e.target.value
+        });
+    }
+
+    onChangeRecurringEvery(e) {
+        this.setState({
+            recurringEvery: e.target.value
+        });
+    }
+
+    onChangeNote(e) {
+        this.setState({
+            note: e.target.value
+        });
+    }
+
+    onUpdate = (Id) => {
+
     }
 
     onRemove = (Id) => {
-        /*axios.delete(APIs.FITNESS_BASE_URL+APIs.cheatmeal.DELETE_CHEATMEALS+Id)
+        axios.delete(APIs.TRANSACTIONS_BASE_URL+APIs.transaction.DELETE_BY_ID+Id)
             .then(res => {
-                    window.location.href = "/workouts";
+                    window.location.href = "/transactions";
                     this.setState({
                         message: 'Record deleted successfully'
                     });
                 }
-            );*/
+            );
     }
 
     onSubmit(e) {
-        /*e.preventDefault();
-        if(this.state.cheatmealID != null){
-            const obj = {
-                CheatmealID: this.state.cheatmealID,
-                UserID: this.state.user.UserID,
-                Date: this.state.date,
-                Name: this.state.description,
-                Weight: this.state.weight,
-            };
-            axios.put(APIs.FITNESS_BASE_URL + APIs.cheatmeal.UPDATE_CHEATMEALS+this.state.cheatmealID, obj)
-                .then(res => {
-                        window.location.href = "/cheatmeals";
-                        this.setState({
-                            message: 'Record updated successfully'
-                        });
-                    }
-                );
+        e.preventDefault();
+        let API = APIs.TRANSACTIONS_BASE_URL;
+        const obj = {
+            date: this.state.date,
+            description: this.state.description,
+            categoryId: this.state.categoryId,
+            amount: this.state.amount,
+        };
+        if(this.state.isRecurring){
+            obj.endDate = this.state.endDate;
+            obj.recurringEvery = this.state.recurringEvery;
+            obj.note = this.state.note;
+            API = API+APIs.transaction.ADD_NEW_RECURRING;
+        }
+        axios.post(API, obj)
+            .then(res => {
+                window.location.href = "/transactions";
+                this.setState({
+                    message: 'New record added successfully'
+                });
+                }
+            );
+        this.setState({
+            date: '',
+            description: '',
+            categoryId: '',
+            amount: '',
+        });
+        if(this.state.isRecurring){
             this.setState({
-                date: '',
-                description: '',
-                weight: '',
-                cheatmealID: null,
-                buttonName:'Add',
+                endDate: '',
+                recurringEvery: '',
+                note: ''
             });
-
-        }else {
-            const obj = {
-                UserID: this.state.user.UserID,
-                Date: this.state.date,
-                Name: this.state.description,
-                Weight: this.state.weight,
-            };
-            const weight = {
-                weight: this.state.weight,
-            };
-            axios.post(APIs.FITNESS_BASE_URL + APIs.cheatmeal.ADD_CHEATMEALS, obj)
-                .then(res => {
-                    axios.put(APIs.USER_BASE_URL + APIs.user.UPDATE_WEIGHT+this.state.user.UserID,weight)
-                        .then(res => {
-                                console.log(res.data.message);
-                            }
-                        );
-                        window.location.href = "/cheatmeals";
-                        this.setState({
-                            message: 'New record added successfully'
-                        });
-                    }
-                );
-            this.setState({
-                date: '',
-                description: '',
-                time: '',
-                weight: '',
-            });
-        }*/
+        }
     }
 
-    getWorkouts(){
+    getTransactions(){
         axios.get(APIs.TRANSACTIONS_BASE_URL
         )
             .then(
@@ -165,9 +165,9 @@ export default class Transactions extends Component{
     }
     render(){
         return (
-            <div className="workouts" align="center">
+            <div align="center">
                 <h2>My Transactions</h2>
-                <div className="add_workout" align="left">
+                <div className="Add_Record" align="left">
                     <Form onSubmit={this.onSubmit}>
                         <Form.Group>
                             <Form.Label>Date</Form.Label>
@@ -195,13 +195,75 @@ export default class Transactions extends Component{
                             <Form.Label className="required">Category Id</Form.Label>
                             <input
                                 type="text"
-                                id="weight"
-                                name="weight"
-                                value={this.state.weight}
+                                id="categoryId"
+                                name="categoryId"
+                                value={this.state.categoryId}
                                 onChange={this.onChangeCategoryId}
                                 required={true}
                             />
                         </Form.Group>
+                        <Form.Group>
+                            <Form.Label className="required">Amount</Form.Label>
+                            <input
+                                type="text"
+                                id="amount"
+                                name="amount"
+                                value={this.state.amount}
+                                onChange={this.onChangeAmount}
+                                required={true}
+                            />
+                        </Form.Group>
+                        <Form.Group>
+                            <Form.Group style={{ display: 'flex', alignItems: 'center', padding: '20px'}}>
+                                <Form.Label>Recurring Transaction</Form.Label>
+                                <Form.Check
+                                    type="checkbox"
+                                    id="isRecurring"
+                                    onChange={this.onChangeIsRecurring}
+                                    checked={this.state.isRecurring}
+                                />
+                            </Form.Group>
+                        </Form.Group>
+                        {this.state.isRecurring && (
+                            <>
+                                <Form.Group>
+                                    <Form.Label className="required">End Date</Form.Label>
+                                    <input
+                                        type="date"
+                                        id="endDate"
+                                        name="endDate"
+                                        value={this.state.endDate}
+                                        onChange={this.onChangeEndDate}
+                                        required={this.state.isRecurring}
+                                    />
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label className="required">Recurring Every</Form.Label>
+                                    <select
+                                        id="recurringEvery"
+                                        name="recurringEvery"
+                                        value={this.state.recurringEvery}
+                                        onChange={this.onChangeRecurringEvery}
+                                        required={this.state.isRecurring}
+                                    >
+                                        <option value="Day">Day</option>
+                                        <option value="Month">Month</option>
+                                        <option value="Year">Year</option>
+                                    </select>
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label>Note</Form.Label>
+                                    <input
+                                        type="text"
+                                        id="note"
+                                        name="note"
+                                        value={this.state.note}
+                                        onChange={this.onChangeNote}
+                                        required={true}
+                                    />
+                                </Form.Group>
+                            </>
+                        )}
                         <div align="center" className="buttons">
                             <Button variant="primary" type="submit">
                                 <span>{this.state.buttonName}</span>
@@ -213,7 +275,7 @@ export default class Transactions extends Component{
 
                 <h3>Transactions</h3>
 
-                <div className="my_workout">
+                <div className="Records">
                     {
                         (this.state.message) ? (
                             <h5 align="center" className="alert-warning"><i className="fa fa-warning"> {this.state.message}</i> </h5>
@@ -225,17 +287,22 @@ export default class Transactions extends Component{
                                     <th>Description</th>
                                     <th>Category Id</th>
                                     <th>Amount</th>
-                                    <th>Action</th>
+                                    <th>Recurring Transaction End Date</th>
+                                    <th>Recurring Every</th>
+                                    <th>Note</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {this.state.transactions.map(transaction => (
                                     <tr key={transaction.id}>
-                                        <td width="200px">{transaction.date}</td>
-                                        <td>{transaction.description}</td>
+                                        <td width="100px">{transaction.date}</td>
+                                        <td width="200px">{transaction.description}</td>
                                         <td width="100px" align="right">{transaction.categoryId}</td>
                                         <td width="100px" align="right">{transaction.amount}</td>
-                                        <td width="200px" align="center">
+                                        <td width="200px" align="right">{transaction.endDate}</td>
+                                        <td width="100px" align="right">{transaction.recurringEvery}</td>
+                                        <td width="100px" align="right">{transaction.note}</td>
+                                        <td width="300px" align="center">
                                             <Button style={{
                                                 backgroundColor: '#f5f5f5',
                                                 padding: '5px',

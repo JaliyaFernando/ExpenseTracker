@@ -107,7 +107,7 @@
     border: none;
 }
 
-.workouts input{
+.Add_Record input{
     border: 1px solid darkgray;
     border-radius: 4px;
     width: 250px;
@@ -115,15 +115,24 @@
     margin: 10px;
 }
 
-.add_workout{
+.Add_Record select{
+    border: 1px solid darkgray;
+    border-radius: 4px;
+    width: 265px;
+    padding: 6px;
+    margin: 10px;
+}
+
+
+.Add_Record{
     width: 250px;
 }
 
-.my_workout{
+.Records{
     width: 80%;
 }
 
-.add_workout Button {
+.Add_Record Button {
     display: inline-block;
     border-radius: 4px;
     background-color: darkorange;
