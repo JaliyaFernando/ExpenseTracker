@@ -5,12 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8ae182b8-21e2-48e9-b8d5-53a3ff2545cf" name="Changes" comment="Initial commit">
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/ExpenseTracker/src/main/java/com/example/expensetracker/api/controller/SummaryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/ExpenseTracker/src/main/java/com/example/expensetracker/api/controller/SummaryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/expense_tracker_app/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/expense_tracker_app/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/expense_tracker_app/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/expense_tracker_app/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/expense_tracker_app/src/app/components/Reports.js" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/expense_tracker_app/src/app/components/Reports.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Frontend/expense_tracker_app/src/app/constants/APIs.js" beforeDir="false" afterPath="$PROJECT_DIR$/Frontend/expense_tracker_app/src/app/constants/APIs.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Rebase.Settings">
+    <option name="NEW_BASE" value="main" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -18,6 +26,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 0
+}]]></component>
   <component name="ProjectId" id="2agSDdIMD4SMRy6ibkrebIQEYKP" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -25,10 +36,12 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/ULAKSJA/Downloads/New folder/ExpenseTracker",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/alokalimark/Documents/IIT/ExpenseTracker",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",

@@ -1,104 +1,116 @@
 /*Dashboard*/
-.menuCard{
-    width: 30%;
+.menuCard {
+  width: 30%;
 }
-.mainCardImg{
-    height: 180px;
-    width: 180px;
-    padding-top: 10px;
+.mainCardImg {
+  height: 180px;
+  width: 180px;
+  padding-top: 10px;
 }
-.dashboard{
-    padding-top: 15px;
-    padding-bottom: 15px;
+.dashboard {
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
-.dashboard Card{
-    width: 220px;
+.dashboard Card {
+  width: 220px;
 }
 .menuCard Button {
-    display: inline-block;
-    border-radius: 4px;
-    background-color: darkorange;
-    border: none;
-    color: #FFFFFF;
-    text-align: center;
-    font-size: 20px;
-    width: 200px;
-    transition: all 0.5s;
-    cursor: pointer;
-    padding: 5px;
-    margin: 10px;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: darkorange;
+  border: none;
+  color: #ffffff;
+  text-align: center;
+  font-size: 20px;
+  width: 200px;
+  transition: all 0.5s;
+  cursor: pointer;
+  padding: 5px;
+  margin: 10px;
 }
 .menuCard Button span {
-    cursor: pointer;
-    display: inline-block;
-    position: relative;
-    transition: 0.5s;
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
 }
 .menuCard Button span:after {
-    content: '\00bb';
-    position: absolute;
-    opacity: 0;
-    top: 0;
-    right: -20px;
-    transition: 0.5s;
+  content: "\00bb";
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
 }
-.menuCard Button:hover{
-    background-color: orange;
+.menuCard Button:hover {
+  background-color: orange;
 }
 .menuCard Button:hover span {
-    padding-right: 25px;
+  padding-right: 25px;
 }
 .menuCard Button:hover span:after {
-    opacity: 1;
-    right: 0;
+  opacity: 1;
+  right: 0;
 }
 
-
-.view_recent select{
-    border: 1px solid darkgray;
-    border-radius: 4px;
-    width: 85px;
-    padding: 6px;
-    margin: 10px;
-
+.view_recent select {
+  border: 1px solid darkgray;
+  border-radius: 4px;
+  width: 85px;
+  padding: 6px;
+  margin: 10px;
 }
 
-.Add_Record input{
-    border: 1px solid darkgray;
-    border-radius: 4px;
-    width: 250px;
-    padding: 6px;
-    margin: 10px;
+.Add_Record input {
+  border: 1px solid darkgray;
+  border-radius: 4px;
+  width: 250px;
+  padding: 6px;
+  margin: 10px;
 }
 
-.Add_Record select{
-    border: 1px solid darkgray;
-    border-radius: 4px;
-    width: 265px;
-    padding: 6px;
-    margin: 10px;
+.Add_Record select {
+  border: 1px solid darkgray;
+  border-radius: 4px;
+  width: 265px;
+  padding: 6px;
+  margin: 10px;
 }
 
-
-.Add_Record{
-    width: 250px;
+.Add_Record {
+  width: 250px;
 }
 
-.Records{
-    width: 80%;
+.Records {
+  width: 80%;
 }
 
 .Add_Record Button {
-    display: inline-block;
-    border-radius: 4px;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: darkorange;
+  border: none;
+  color: #ffffff;
+  text-align: center;
+  font-size: 20px;
+  width: 150px;
+  transition: all 0.5s;
+  cursor: pointer;
+  padding: 2px;
+  margin: 10px;
+}
+
+.customButtonsContainer {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.buttonStyle {
     background-color: darkorange;
-    border: none;
-    color: #FFFFFF;
-    text-align: center;
-    font-size: 20px;
-    width: 150px;
-    transition: all 0.5s;
-    cursor: pointer;
-    padding: 2px;
-    margin: 10px;
+    padding: 20px;
+    margin: 20px;
+    border-radius: 20px;
+    border-color: beige;
+    width: 200px;
 }
