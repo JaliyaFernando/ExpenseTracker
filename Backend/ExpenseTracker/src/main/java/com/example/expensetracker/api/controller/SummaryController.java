@@ -26,12 +26,12 @@ public class SummaryController {
         Map<String, Object> result = new HashMap<>();
         result.put("expenses", allSummary.stream()
                 .filter(Transaction::isExpense)
-                .peek(summary -> summary.setDescription("Expenses - " + summary.getDescription()))
+                .peek(summary -> summary.setDescription(summary.getDescription()))
                 .collect(Collectors.toList()));
 
         result.put("income", allSummary.stream()
                 .filter(Transaction::isIncome)
-                .peek(summary -> summary.setDescription("Income - " + summary.getDescription()))
+                .peek(summary -> summary.setDescription(summary.getDescription()))
                 .collect(Collectors.toList()));
 
         double totalExpenses = allSummary.stream()
@@ -59,7 +59,7 @@ public class SummaryController {
         List<Transaction> expenses = allSummary.stream()
                 .filter(Transaction::isExpense)
                 .filter(transaction -> isTransactionInYearMonth(transaction, yearMonth))
-                .peek(summary -> summary.setDescription("Expenses - " + summary.getDescription()))
+                .peek(summary -> summary.setDescription(summary.getDescription()))
                 .collect(Collectors.toList());
         result.put("expenses", expenses);
 
@@ -67,7 +67,7 @@ public class SummaryController {
         List<Transaction> income = allSummary.stream()
                 .filter(Transaction::isIncome)
                 .filter(transaction -> isTransactionInYearMonth(transaction, yearMonth))
-                .peek(summary -> summary.setDescription("Income - " + summary.getDescription()))
+                .peek(summary -> summary.setDescription(summary.getDescription()))
                 .collect(Collectors.toList());
         result.put("income", income);
 
