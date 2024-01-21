@@ -18,8 +18,8 @@ public class TransactionController {
     }
 
     // Endpoint to get a single transaction by ID
-    @GetMapping()
-    public Transaction getTransactionById(@RequestParam  Integer id){
+    @GetMapping("/{id}")
+    public Transaction getTransactionById(@PathVariable  Integer id){
         Optional transaction = transactionService.getTransactionById(id);
         if(transaction.isPresent()){
             return (Transaction) transaction.get();

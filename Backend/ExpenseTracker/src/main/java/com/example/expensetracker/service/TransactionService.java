@@ -34,7 +34,7 @@ public class TransactionService {
     public List<Transaction> getTransactionByCategory(String id){
         List<Transaction> transactionListByCategory = new ArrayList<>();
         for(Transaction transaction:transactionList){
-            if(id == transaction.getCategoryId()){
+            if (id.equals(transaction.getCategoryId())){
                 transactionListByCategory.add(transaction);
             }
         }
