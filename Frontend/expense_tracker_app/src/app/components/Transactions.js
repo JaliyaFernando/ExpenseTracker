@@ -18,6 +18,7 @@ export default class Transactions extends Component{
         this.getTransactions = this.getTransactions.bind(this);
         this.getCategories = this.getCategories.bind(this);
         this.onUpdate = this.onUpdate.bind(this);
+        this.onCancelUpdate = this.onCancelUpdate.bind(this);
         this.onRemove = this.onRemove.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.state = {
@@ -27,7 +28,7 @@ export default class Transactions extends Component{
             date:'',
             description:'',
             categoryId: '',
-            transactionId: '',
+            transactionId: null,
             amount: '',
             id: null,
             isRecurring: false,
@@ -117,7 +118,46 @@ export default class Transactions extends Component{
         }
     }
 
-    onUpdate = (Id) => {
+    onCancelUpdate(e) {
+        this.setState({
+            isRecurring: false,
+            date: '',
+            categoryId: '',
+            description: '',
+            amount: '',
+            endDate: '',
+            recurringEvery: '',
+            note: '',
+            transactionId: null,
+            buttonName: 'Add'
+        });
+    }
+
+
+    onUpdate = (Id) => {this.setState({
+        buttonName: 'Update'
+    });
+
+        for (let i = 0; i < this.state.transactions.length; i++) {
+            if (this.state.transactions[i].id === Id) {
+                this.setState({
+                    isRecurring: false,
+                    transactionId: this.state.transactions[i].id,
+                    date: this.state.transactions[i].date,
+                    categoryId: this.state.transactions[i].categoryId,
+                    description: this.state.transactions[i].description,
+                    amount: this.state.transactions[i].amount
+                });
+                if(this.state.transactions[i].recurringEvery){
+                    this.setState({
+                        isRecurring: true,
+                        endDate: this.state.transactions[i].endDate,
+                        recurringEvery: this.state.transactions[i].recurringEvery,
+                        note: this.state.transactions[i].note
+                    });
+                }
+            }
+        }
 
     }
 
@@ -134,40 +174,79 @@ export default class Transactions extends Component{
 
     onSubmit(e) {
         e.preventDefault();
-        let API = APIs.TRANSACTIONS_BASE_URL;
-        const obj = {
-            date: this.state.date,
-            description: this.state.description,
-            categoryId: this.state.categoryId,
-            amount: this.state.amount,
-        };
-        if(this.state.isRecurring){
-            obj.endDate = this.state.endDate;
-            obj.recurringEvery = this.state.recurringEvery;
-            obj.note = this.state.note;
-            API = API+APIs.transaction.ADD_NEW_RECURRING;
-        }
-        axios.post(API, obj)
-            .then(res => {
-                window.location.href = "/transactions";
-                this.setState({
-                    message: 'New record added successfully'
-                });
-                }
-            );
-        this.setState({
-            date: '',
-            description: '',
-            categoryId: '',
-            amount: '',
-        });
-        if(this.state.isRecurring){
+        let API = APIs.TRANSACTIONS_BASE_URL+APIs.transaction.UPDATE;
+        if(this.state.transactionId != null){
+            const obj = {
+                date: this.state.date,
+                description: this.state.description,
+                categoryId: this.state.categoryId,
+                amount: this.state.amount,
+            };
+            if(this.state.isRecurring){
+                obj.endDate = this.state.endDate;
+                obj.recurringEvery = this.state.recurringEvery;
+                obj.note = this.state.note;
+                API = API+APIs.transaction.UPDATE_RECURRING;
+            }
+            axios.put(API+'?id='+this.state.transactionId, obj)
+                .then(res => {
+                        window.location.href = "/transactions";
+                        this.setState({
+                            message: 'Record updated successfully'
+                        });
+                    }
+                );
             this.setState({
+                isRecurring: false,
+                date: '',
+                categoryId: '',
+                description: '',
+                amount: '',
                 endDate: '',
                 recurringEvery: '',
-                note: ''
+                note: '',
+                transactionId: null,
+                buttonName: 'Add'
             });
+
         }
+        else{
+            const obj = {
+                date: this.state.date,
+                description: this.state.description,
+                categoryId: this.state.categoryId,
+                amount: this.state.amount,
+            };
+            if(this.state.isRecurring){
+                obj.endDate = this.state.endDate;
+                obj.recurringEvery = this.state.recurringEvery;
+                obj.note = this.state.note;
+                API = API+APIs.transaction.ADD_NEW_RECURRING;
+            }
+            axios.post(API, obj)
+                .then(res => {
+                        window.location.href = "/transactions";
+                        this.setState({
+                            message: 'New record added successfully'
+                        });
+                    }
+                );
+            this.setState({
+                date: '',
+                description: '',
+                categoryId: '',
+                amount: '',
+            });
+            if(this.state.isRecurring){
+                this.setState({
+                    endDate: '',
+                    recurringEvery: '',
+                    note: ''
+                });
+            }
+        }
+
+
     }
 
     getTransactions(){
@@ -341,6 +420,23 @@ export default class Transactions extends Component{
                             </Button>
                             <br/>
                         </div>
+
+                        {
+                            (this.state.transactionId) ? (
+                                <div align="center" className="buttons">
+                                    <Button style={{
+                                        backgroundColor: 'gray',
+                                        color: 'black',
+                                        border: '1px solid #ccc',
+                                        borderRadius: '5px',
+                                        textAlign: 'center',}}
+                                            onClick={() => this.onCancelUpdate()}>Cancel</Button>
+                                    <br/>
+                                </div>
+                            ) : (<div></div>)
+                        }
+
+
                     </Form>
                 </div>
 
