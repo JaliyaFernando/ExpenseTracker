@@ -31,6 +31,16 @@ public class TransactionService {
         return optional;
     }
 
+    public List<Transaction> getTransactionByCategory(String id){
+        List<Transaction> transactionListByCategory = new ArrayList<>();
+        for(Transaction transaction:transactionList){
+            if(id == transaction.getCategoryId()){
+                transactionListByCategory.add(transaction);
+            }
+        }
+        return transactionListByCategory;
+    }
+
     public List<Transaction> getAllTransactions() {
         return new ArrayList<>(transactionList);
     }

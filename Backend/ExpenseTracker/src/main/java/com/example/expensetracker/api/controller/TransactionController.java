@@ -18,13 +18,19 @@ public class TransactionController {
     }
 
     // Endpoint to get a single transaction by ID
-    @GetMapping("/{id}")
-    public Transaction getTransactionById(@PathVariable  Integer id){
+    @GetMapping()
+    public Transaction getTransactionById(@RequestParam  Integer id){
         Optional transaction = transactionService.getTransactionById(id);
         if(transaction.isPresent()){
             return (Transaction) transaction.get();
         }
         return null;
+    }
+
+    // Endpoint to get transactions by category
+    @GetMapping("/category")
+    public List<Transaction> getTransactionByCategory(@RequestParam  String id){
+        return transactionService.getTransactionByCategory(id);
     }
 
     // Endpoint to get all transactions
