@@ -124,6 +124,18 @@ export default class Categories extends Component{
         }
     }
 
+    onCancelUpdate(e) {
+        this.setState({
+            categoryId: null,
+            categoryName:'',
+            categoryType: '',
+            categoryBudget: '',
+            buttonName: 'Add',
+            typeDropDownLabel: "Select a type",
+            title: "Add Category"
+        });
+    }
+
     getCategories(){
         axios.get(APIs.CATEGORIES_BASE_URL
         )
@@ -205,6 +217,21 @@ export default class Categories extends Component{
                             </Button>
                             <br/>
                         </div>
+
+                        {
+                            (this.state.categoryId) ? (
+                                <div align="center" className="buttons">
+                                    <Button style={{
+                                        backgroundColor: 'gray',
+                                        color: 'black',
+                                        border: '1px solid #ccc',
+                                        borderRadius: '5px',
+                                        textAlign: 'center',}}
+                                            onClick={() => this.onCancelUpdate()}>Cancel</Button>
+                                    <br/>
+                                </div>
+                            ) : (<div></div>)
+                        }
                     </Form>
                 </div>
 

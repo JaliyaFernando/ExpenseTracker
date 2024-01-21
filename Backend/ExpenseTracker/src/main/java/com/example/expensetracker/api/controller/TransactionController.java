@@ -63,6 +63,11 @@ public class TransactionController {
         return transactionService.updateTransaction(id, newTransaction);
     }
 
+    @PutMapping("/updateTransaction/recurring")
+    public String updateTransaction(@RequestParam Integer id, @RequestBody RecurringTransaction newTransaction) {
+        return transactionService.updateTransaction(id, newTransaction);
+    }
+
     // Endpoint to delete a transaction
     @DeleteMapping("/deleteTransaction")
     public String deleteTransaction(Integer id) {

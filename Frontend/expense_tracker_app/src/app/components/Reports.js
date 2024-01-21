@@ -16,22 +16,46 @@ export default class Reports extends Component {
       selectedYear: "", // New state property for selected year
     };
   }
-
+  getTransactions() {}
   onView = () => {
-    axios.get(`${APIs.SUMMARY_BASE_URL}/all`).then(
+    axios.get(APIs.TRANSACTIONS_BASE_URL).then(
       (response) => {
-        this.setState({
-          income: response.data.income,
-          expenses: response.data.expenses,
-          totalIncome: response.data.totalIncome,
-          totalExpenses: response.data.totalExpenses,
-          message: "",
-        });
+        if (response.data.length > 0) {
+          this.setState(
+            {
+              transactions: response.data,
+            },
+            () => {
+              axios.post(`${APIs.SUMMARY_BASE_URL}/all`, response.data).then(
+                (response) => {
+                  this.setState({
+                    income: response.data.income,
+                    expenses: response.data.expenses,
+                    totalIncome: response.data.totalIncome,
+                    totalExpenses: response.data.totalExpenses,
+                    message: "",
+                  });
+                },
+                (error) => {
+                  console.log(error);
+                  this.setState({
+                    message: "Report not found",
+                  });
+                }
+              );
+              console.log(response.data);
+            }
+          );
+        } else {
+          this.setState({
+            message: "No transactions at the moment",
+          });
+        }
       },
       (error) => {
         console.log(error);
         this.setState({
-          message: "Report not found",
+          message: "No transactions at the moment",
         });
       }
     );
@@ -54,25 +78,50 @@ export default class Reports extends Component {
     }
 
     const yearMonth = `${selectedYear}-${selectedMonth}`;
-
-    axios
-      .get(`${APIs.SUMMARY_BASE_URL}/byYearMonth?yearMonth=${yearMonth}`)
-      .then(
-        (response) => {
+    axios.get(APIs.TRANSACTIONS_BASE_URL).then(
+      (response) => {
+        if (response.data.length > 0) {
+          this.setState(
+            {
+              transactions: response.data,
+            },
+            () => {
+              axios
+                .post(
+                  `${APIs.SUMMARY_BASE_URL}/byYearMonth?yearMonth=${yearMonth}`,
+                  response.data
+                )
+                .then(
+                  (response) => {
+                    this.setState({
+                      income: response.data.income,
+                      expenses: response.data.expenses,
+                      totalIncome: response.data.totalIncome,
+                      totalExpenses: response.data.totalExpenses,
+                      message: "",
+                    });
+                  },
+                  (error) => {
+                    this.setState({
+                      message: "Report not found",
+                    });
+                  }
+                );
+            }
+          );
+        } else {
           this.setState({
-            income: response.data.income,
-            expenses: response.data.expenses,
-            totalIncome: response.data.totalIncome,
-            totalExpenses: response.data.totalExpenses,
-            message: "",
-          });
-        },
-        (error) => {
-          this.setState({
-            message: "Report not found",
+            message: "No transactions at the moment",
           });
         }
-      );
+      },
+      (error) => {
+        console.log(error);
+        this.setState({
+          message: "No transactions at the moment",
+        });
+      }
+    );
   };
 
   handleMonthChange = (event) => {

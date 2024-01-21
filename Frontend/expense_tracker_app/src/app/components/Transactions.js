@@ -174,8 +174,9 @@ export default class Transactions extends Component{
 
     onSubmit(e) {
         e.preventDefault();
-        let API = APIs.TRANSACTIONS_BASE_URL+APIs.transaction.UPDATE;
+        let API = APIs.TRANSACTIONS_BASE_URL;
         if(this.state.transactionId != null){
+            API = API+APIs.transaction.UPDATE;
             const obj = {
                 date: this.state.date,
                 description: this.state.description,
