@@ -8,6 +8,7 @@ module.exports = {
         DELETE_BY_ID: '/deleteTransaction?id=',
         UPDATE:'/updateTransaction',
         UPDATE_RECURRING: '/recurring',
+        CATEGORY: '/category?id='
     },
     category :{
         ADD_CATEGORY: '/addCategory',

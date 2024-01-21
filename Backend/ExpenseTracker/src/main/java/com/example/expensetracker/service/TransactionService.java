@@ -15,8 +15,8 @@ public class TransactionService {
     public TransactionService(){
         transactionList = new ArrayList<>();
         Transaction transaction = new RecurringTransaction(1, "Monthly Rent Payment",1200.0,
-                "E001","2024-01-01","2026-01-01","Month","Monthly Rent Payment");
-        Transaction transaction2 = new Transaction(2, "Grocery Shopping",50.0,"E003","2024-01-15");
+                "E6","2024-01-01","2026-01-01","Month","Monthly Rent Payment");
+        Transaction transaction2 = new Transaction(2, "Grocery Shopping",50.0,"E1","2024-01-15");
         transactionList.add(transaction);
         transactionList.add(transaction2);
     }

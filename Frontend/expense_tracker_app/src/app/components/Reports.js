@@ -6,17 +6,70 @@ import APIs from "../constants/APIs";
 export default class Reports extends Component {
   constructor(props) {
     super(props);
+    this.getCategories = this.getCategories.bind(this);
+    this.onChangeCategoryId = this.onChangeCategoryId.bind(this);
     this.state = {
       income: [],
       expenses: [],
       totalIncome: 0,
       totalExpenses: 0,
+      totalAllocateBudget: 0,
       message: "",
       selectedMonth: "",
-      selectedYear: "", // New state property for selected year
+      selectedYear: "",
+      categories: [],
+      categoryId: "",
+      balanceBudget: 0,
     };
+    this.getCategories();
   }
-  getTransactions() {}
+  intialState = {
+    income: [],
+    expenses: [],
+    totalIncome: 0,
+    totalExpenses: 0,
+    totalAllocateBudget: 0,
+    balanceBudget: 0,
+  };
+
+  getCategories() {
+    axios.get(APIs.CATEGORIES_BASE_URL).then(
+      (response) => {
+        if (response.data.length > 0) {
+          this.setState(
+            {
+              categories: response.data,
+            },
+            () => {
+              console.log("No of categories:", this.state.categories.length);
+            }
+          );
+        } else {
+          this.setState({
+            message: "No categories at the moment",
+          });
+        }
+      },
+      (error) => {
+        console.log(error);
+        this.setState({
+          message: "No categories at the moment",
+        });
+      }
+    );
+  }
+
+  onChangeCategoryId(e) {
+    const selectedCategory = this.state.categories.find(
+      (category) => category.categoryId === e.target.value
+    );
+    this.setState({
+      totalAllocateBudget: selectedCategory.categoryBudget,
+      categoryId: e.target.value,
+      message: "",
+    });
+  }
+
   onView = () => {
     axios.get(APIs.TRANSACTIONS_BASE_URL).then(
       (response) => {
@@ -81,34 +134,38 @@ export default class Reports extends Component {
     axios.get(APIs.TRANSACTIONS_BASE_URL).then(
       (response) => {
         if (response.data.length > 0) {
-          this.setState(
-            {
-              transactions: response.data,
-            },
-            () => {
-              axios
-                .post(
-                  `${APIs.SUMMARY_BASE_URL}/byYearMonth?yearMonth=${yearMonth}`,
-                  response.data
-                )
-                .then(
-                  (response) => {
-                    this.setState({
-                      income: response.data.income,
-                      expenses: response.data.expenses,
-                      totalIncome: response.data.totalIncome,
-                      totalExpenses: response.data.totalExpenses,
-                      message: "",
-                    });
-                  },
-                  (error) => {
-                    this.setState({
-                      message: "Report not found",
-                    });
-                  }
-                );
-            }
-          );
+          axios
+            .post(
+              `${APIs.SUMMARY_BASE_URL}/byYearMonth?yearMonth=${yearMonth}`,
+              response.data
+            )
+            .then(
+              (response) => {
+                if (
+                  response.data.income.length !== 0 ||
+                  response.data.expenses.length !== 0
+                ) {
+                  this.setState({
+                    income: response.data.income,
+                    expenses: response.data.expenses,
+                    totalIncome: response.data.totalIncome,
+                    totalExpenses: response.data.totalExpenses,
+                    message: "",
+                  });
+                } else {
+                  this.setState(this.intialState);
+                  this.setState({
+                    message: "Transactions not found",
+                  });
+                }
+              },
+
+              (error) => {
+                this.setState({
+                  message: "Report not found",
+                });
+              }
+            );
         } else {
           this.setState({
             message: "No transactions at the moment",
@@ -124,6 +181,64 @@ export default class Reports extends Component {
     );
   };
 
+  onCategoryFilter = () => {
+    axios
+      .get(
+        APIs.TRANSACTIONS_BASE_URL +
+          APIs.transaction.CATEGORY +
+          this.state.categoryId
+      )
+      .then(
+        (response) => {
+          if (response.data.length > 0) {
+            axios.post(`${APIs.SUMMARY_BASE_URL}/all`, response.data).then(
+              (response) => {
+                console.log(response.data);
+                if (response.data.length !== 0) {
+                  this.setState({
+                    income: response.data.income,
+                    expenses: response.data.expenses,
+                    totalIncome: response.data.totalIncome,
+                    totalExpenses: response.data.totalExpenses,
+                    balanceBudget:
+                      this.state.totalAllocateBudget -
+                      response.data.totalExpenses,
+                    message: "",
+                  });
+                } else {
+                  this.setState(this.intialState);
+                  this.setState({
+                    message: "Transactions not found",
+                  });
+                }
+              },
+              (error) => {
+                console.log(error);
+                this.setState({
+                  message: "Report not found",
+                });
+              }
+            );
+            console.log(response.data);
+          } else {
+            this.setState({
+              income: [],
+              expenses: [],
+              totalIncome: 0.0,
+              totalExpenses: 0.0,
+              message: "No transactions at the moment",
+            });
+          }
+        },
+        (error) => {
+          console.log(error);
+          this.setState({
+            message: "No transactions at the moment",
+          });
+        }
+      );
+  };
+
   handleMonthChange = (event) => {
     this.setState({ selectedMonth: event.target.value });
   };
@@ -132,18 +247,22 @@ export default class Reports extends Component {
     return (
       <div align="center">
         <h2>Reports</h2>
-        <div className="my_workout">
+        <div>
           <div className="customButtonsContainer">
             <Button className="buttonStyle" onClick={this.onFilter}>
-              Filter with Month
+              Transaction Filter with Month
             </Button>
 
             <Button className="buttonStyle" onClick={this.onView}>
               View Report
             </Button>
+
+            <Button className="buttonStyle" onClick={this.onCategoryFilter}>
+              Summary Filter with Month
+            </Button>
           </div>
 
-          <div className="d-flex justify-content-between mt-3">
+          <div className="Add_Record" align="left">
             <span>Select the date and year</span>
 
             <div className="d-flex">
@@ -180,6 +299,23 @@ export default class Reports extends Component {
                 <option value="2022">2022</option>
                 <option value="2023">2023</option>
                 <option value="2024">2024</option>
+              </select>
+
+              <select
+                id="categoryId"
+                name="categoryId"
+                value={this.state.categoryId}
+                onChange={this.onChangeCategoryId}
+                required={true}
+              >
+                <option value="" disabled>
+                  Select a category
+                </option>
+                {this.state.categories.map((category) => (
+                  <option key={category.categoryId} value={category.categoryId}>
+                    {category.categoryName + " - " + category.categoryType}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -242,9 +378,15 @@ export default class Reports extends Component {
             <Table striped bordered hover>
               <thead>
                 <tr>
-                  <th>Description</th>
-                  <th>Amount</th>
-                  <th>Date</th>
+                  <th width="200px" align="left">
+                    Description
+                  </th>
+                  <th width="200px" align="left">
+                    Amount
+                  </th>
+                  <th width="200px" align="left">
+                    Date
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -269,6 +411,17 @@ export default class Reports extends Component {
         {this.state.totalExpenses > 0 && (
           <div>
             <h3>Total Expenses: {this.state.totalExpenses}</h3>
+          </div>
+        )}
+
+        {this.state.totalAllocateBudget > 0 && (
+          <div>
+            <h3>Allocate Budget: {this.state.totalAllocateBudget}</h3>
+          </div>
+        )}
+        {this.state.balanceBudget > 0 && (
+          <div>
+            <h3> Balance Budget: {this.state.balanceBudget}</h3>
           </div>
         )}
       </div>

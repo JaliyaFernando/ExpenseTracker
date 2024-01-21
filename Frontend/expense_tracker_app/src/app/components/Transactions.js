@@ -290,7 +290,7 @@ export default class Transactions extends Component{
                                 categories: response.data
                             },
                             () => {
-                                console.log("No of categories:", this.state.transactions.length);
+                                console.log("No of categories:", this.state.categories.length);
                             })
                     }
                     else{
