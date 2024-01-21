@@ -63,28 +63,32 @@ public class CategoryService {
     }
 
     public String deleteCategory(String id) {
+        boolean idFound = false;
         for (Category category: categoryList) {
             if (id.equals(category.getCategoryId())) {
                 categoryList.remove(category);
+                idFound = true;
                 return "Successfully Removed!";
-            } 
-            else {
-                return "Not Found!";
             }
+        }
+        if (!idFound) {
+            return "Not Found!";
         }
         return "Delete Failed!";
     }
 
     public String updateCategory(String id, Category newCategory) {
+        boolean idFound = false;
         for (Category category: categoryList) {
             if (id.equals(category.getCategoryId())) {
                 category.setCategoryName(newCategory.getCategoryName());
                 category.setCategoryBudget(newCategory.getCategoryBudget());
+                idFound = true;
                 return "Successfully Updated!";
             }
-            else {
-                return "Not Found!";
-            }
+        }
+        if (!idFound) {
+            return "Not Found!";
         }
         return "Update Failed!";
     }

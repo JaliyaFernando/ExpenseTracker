@@ -6,5 +6,11 @@ module.exports = {
         RECENT: '/recent/',
         ADD_NEW_RECURRING: '/recurring',
         DELETE_BY_ID: '/deleteTransaction?id='
+    },
+    category :{
+        ADD_CATEGORY: '/addCategory',
+        UPDATE_CATEGORY: '/updateCategory?id=',
+        DELETE_CATEGORY: '/deleteCategory?id=',
+        GET_CATEGORY_BY_ID: '/category?id='
     }
 }
