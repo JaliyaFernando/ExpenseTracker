@@ -7,7 +7,7 @@ module.exports = {
         ADD_NEW_RECURRING: '/recurring',
         DELETE_BY_ID: '/deleteTransaction?id=',
         UPDATE:'/updateTransaction',
-        UPDATE_RECURRING: '/updateTransaction/recurring',
+        UPDATE_RECURRING: '/recurring',
     },
     category :{
         ADD_CATEGORY: '/addCategory',
