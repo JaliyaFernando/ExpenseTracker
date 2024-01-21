@@ -3,10 +3,7 @@ package com.example.expensetracker.api.controller;
 import com.example.expensetracker.api.model.Transaction;
 import com.example.expensetracker.service.SummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,44 +16,45 @@ public class SummaryController {
 
     @Autowired
     private SummaryService summaryService;
-    @GetMapping("/all")
-    public Map<String, Object> getAllSummary() {
-        List<Transaction> allSummary = summaryService.getAllSummary();
-
+    @PostMapping("/all")
+    public Map<String, Object> getAllSummary(@RequestBody List<Transaction> transactions) {
         Map<String, Object> result = new HashMap<>();
-        result.put("expenses", allSummary.stream()
+
+        List<Transaction> expenseTransactions = transactions.stream()
                 .filter(Transaction::isExpense)
                 .peek(summary -> summary.setDescription(summary.getDescription()))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
 
-        result.put("income", allSummary.stream()
+        List<Transaction> incomeTransactions = transactions.stream()
                 .filter(Transaction::isIncome)
                 .peek(summary -> summary.setDescription(summary.getDescription()))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
 
-        double totalExpenses = allSummary.stream()
-                .filter(Transaction::isExpense)
+        double totalExpenses = expenseTransactions.stream()
                 .mapToDouble(Transaction::getAmount)
                 .sum();
 
-        double totalIncome = allSummary.stream()
-                .filter(Transaction::isIncome)
+        double totalIncome = incomeTransactions.stream()
                 .mapToDouble(Transaction::getAmount)
                 .sum();
+
+        result.put("expenses", expenseTransactions);
+        result.put("income", incomeTransactions);
         result.put("totalIncome", totalIncome);
         result.put("totalExpenses", totalExpenses);
 
         return result;
     }
 
-    @GetMapping("/byYearMonth")
-    public Map<String, Object> getSummaryByYearMonth(@RequestParam(name = "yearMonth") String yearMonth) {
-        List<Transaction> allSummary = summaryService.getAllSummary();
+    @PostMapping("/byYearMonth")
+    public Map<String, Object> getSummaryByYearMonth(
+            @RequestParam(name = "yearMonth") String yearMonth,
+            @RequestBody List<Transaction> transactions) {
 
         Map<String, Object> result = new HashMap<>();
 
         // Filter expenses for the specified year and month
-        List<Transaction> expenses = allSummary.stream()
+        List<Transaction> expenses = transactions.stream()
                 .filter(Transaction::isExpense)
                 .filter(transaction -> isTransactionInYearMonth(transaction, yearMonth))
                 .peek(summary -> summary.setDescription(summary.getDescription()))
@@ -64,7 +62,7 @@ public class SummaryController {
         result.put("expenses", expenses);
 
         // Filter income for the specified year and month
-        List<Transaction> income = allSummary.stream()
+        List<Transaction> income = transactions.stream()
                 .filter(Transaction::isIncome)
                 .filter(transaction -> isTransactionInYearMonth(transaction, yearMonth))
                 .peek(summary -> summary.setDescription(summary.getDescription()))
