@@ -130,6 +130,7 @@ export default class Categories extends Component{
             categoryName:'',
             categoryType: '',
             categoryBudget: '',
+            typeDisable: false,
             buttonName: 'Add',
             typeDropDownLabel: "Select a type",
             title: "Add Category"
