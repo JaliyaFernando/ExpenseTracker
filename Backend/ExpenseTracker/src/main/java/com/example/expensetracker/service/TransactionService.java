@@ -45,12 +45,12 @@ public class TransactionService {
         return new ArrayList<>(transactionList);
     }
 
-    public List<Transaction> getRecentTransactions(Integer amount){
+    public List<Transaction> getRecentTransactions(Integer amount) {
         List<Transaction> transactions = this.getAllTransactions();
 
-        // Sort transactions by date using streams
+        // Sort transactions by date in descending order using streams
         List<Transaction> sortedTransactions = transactions.stream()
-                .sorted((t1, t2) -> t1.getDate().compareTo(t2.getDate()))
+                .sorted((t1, t2) -> t2.getDate().compareTo(t1.getDate())) // Compare in descending order
                 .limit(amount)
                 .collect(Collectors.toList());
 
